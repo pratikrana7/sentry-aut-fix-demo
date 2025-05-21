@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo App with Intentional Errors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .error-button {
+            padding: 10px 15px;
+            margin: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f44336;
+            color: white;
+            cursor: pointer;
+        }
+        .error-button:hover {
+            background-color: #d32f2f;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        #error-count {
+            font-weight: bold;
+            color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h1>Demo App with Intentional Errors</h1>
+    <p>This application contains several intentional errors that will be captured by Sentry and automatically fixed by our system.</p>
+    
+    <div class="card">
+        <h2>Error Counter</h2>
+        <p>Errors triggered: <span id="error-count">0</span></p>
+    </div>
+    
+    <div class="card">
+        <h2>Trigger Errors</h2>
+        <button class="error-button" onclick="triggerReferenceError()">Trigger Reference Error</button>
+        <button class="error-button" onclick="triggerTypeError()">Trigger Type Error</button>
+        <button class="error-button" onclick="triggerSyntaxError()">Trigger Syntax Error</button>
+        <button class="error-button" onclick="triggerBrowserSpecificError()">Trigger Browser-Specific Error</button>
+    </div>
+    
+    <div class="card">
+        <h2>User Data Form</h2>
+        <form id="user-form">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div style="margin-top: 10px;">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div style="margin-top: 10px;">
+                <button type="button" onclick="submitForm()">Submit</button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="card">
+        <h2>Data Display</h2>
+        <button onclick="loadData()">Load Data</button>
+        <div id="data-container"></div>
+    </div>
+
+    <!-- Sentry SDK -->
+    <script src="https://browser.sentry-cdn.com/7.57.0/bundle.min.js"></script>
+    <script src="https://js-de.sentry-cdn.com/61edb47cb5f442c4602cbe8ebf03b17f.min.js" crossorigin="anonymous"></script>
+    
+    <!-- Application Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/data-service.js"></script>
+    <script src="js/form-handler.js"></script>
+    <script src="js/error-triggers.js"></script>
+
+    <script>
+        // Initialize error count from localStorage
+        document.getElementById('error-count').textContent = localStorage.getItem('errorCount') || '0';
+    </script>
+</body>
+</html>
