@@ -80,7 +80,31 @@
     </div>
 
     <!-- Sentry SDK -->
-    <script src="https://browser.sentry-cdn.com/7.57.0/bundle.min.js"></script>
+    <script>
+        // Check if Sentry is blocked
+        window.addEventListener('error', function(e) {
+            if (e.message.includes('Sentry is not defined')) {
+                console.warn('Sentry is blocked by an ad blocker or privacy extension. Error tracking will be limited.');
+                // Create a mock Sentry object to prevent errors
+                window.Sentry = {
+                    init: function() { console.log('Mock Sentry initialized'); },
+                    captureException: function(error) { 
+                        console.error('Error captured (Sentry blocked):', error);
+                        // Still update error count even if Sentry is blocked
+                        const currentCount = parseInt(localStorage.getItem('errorCount') || '0');
+                        localStorage.setItem('errorCount', currentCount + 1);
+                        const errorCountElement = document.getElementById('error-count');
+                        if (errorCountElement) {
+                            errorCountElement.textContent = currentCount + 1;
+                        }
+                    },
+                    withScope: function(callback) { callback({ setTag: function() {}, setExtra: function() {} }); },
+                    BrowserTracing: function() { return {}; }
+                };
+            }
+        }, true);
+    </script>
+    <script src="https://browser.sentry-cdn.com/7.57.0/bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://js-de.sentry-cdn.com/61edb47cb5f442c4602cbe8ebf03b17f.min.js" crossorigin="anonymous"></script>
     
     <!-- Application Scripts -->
