@@ -70,7 +70,7 @@ function triggerBrowserSpecificError() {
                 // Chrome-specific API with error
                 const chromeFeature = window.chrome.loadTimes;
                 // This will cause an error in some Chrome versions
-                console.log(chromeFeature().firstPaintTime());
+                console.log(chromeFeature.firstPaintTime);
             } catch (e) {
                 Sentry.captureException(e);
             }
